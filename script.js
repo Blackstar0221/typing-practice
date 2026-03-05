@@ -1,21 +1,37 @@
-// ----- Word lists for different difficulties -----
-const easyWords = [
-  "cat", "dog", "sun", "tree", "star",
-  "blue", "book", "game", "code", "fish",
-  "time", "rain", "note", "key", "zero"
+// ----- Language state -----
+let currentLanguage = "en"; // default is English
+
+// English word pool
+const wordPoolEn = [
+  "cat", "dog", "sun", "tree", "star", "blue", "book", "game", "code", "fish",
+  "time", "rain", "note", "key", "zero", "planet", "window", "school",
+  "puzzle", "galaxy", "object", "random", "yellow", "silent", "future",
+  "typing", "memory", "middle", "master", "vector", "rhythm", "awkward",
+  "psychology", "javascript", "parallel", "campaign", "mysterious",
+  "symmetric", "algorithm", "synchronize", "lightweight", "dictionary",
+  "conscious", "misleading", "enigmatic", "forest", "rocket", "signal",
+  "matrix", "neuron", "orbit", "shadow", "spiral", "binary", "circuit",
+  "portal", "crystal", "thunder", "static", "quantum", "fusion",
+  "oboe", "galaxytaurus", "twinkle", "lego", "replit"
 ];
 
-const mediumWords = [
-  "planet", "window", "school", "puzzle", "galaxy",
-  "object", "random", "yellow", "silent", "future",
-  "typing", "memory", "middle", "master", "vector"
+// Korean word pool
+const wordPoolKo = [
+  "고양이", "강아지", "바다", "하늘", "학교",
+  "컴퓨터", "프로그래밍", "자바스크립트", "키보드", "연습",
+  "음악", "게임", "레고", "트윈클", "행성",
+  "나무", "별빛", "우주", "은하", "토러스",
+  "연필", "공책", "시계", "버스", "지하철",
+  "초콜릿", "사과", "바나나", "딸기", "라면",
+  "책상", "의자", "창문", "문", "복도",
+  "연습장", "시험", "숙제", "공부", "집중",
+  "인터넷", "브라우저", "깃허브", "레플릿", "코딩",
+  "알고리즘", "함수", "변수", "객체", "배열"
 ];
 
-const hardWords = [
-  "rhythm", "awkward", "psychology", "javascript", "parallel",
-  "campaign", "mysterious", "symmetric", "algorithm", "synchronize",
-  "lightweight", "dictionary", "conscious", "misleading", "enigmatic"
-];
+function getActiveWordPool() {
+  return currentLanguage === "en" ? wordPoolEn : wordPoolKo;
+}
 
 // ----- DOM elements -----
 const currentWordSpan = document.getElementById("currentWord");
@@ -35,6 +51,25 @@ const accuracySpan = document.getElementById("accuracy");
 const avgTimeSpan = document.getElementById("avgTime");
 const resultMessage = document.getElementById("resultMessage");
 
+// lang toggle
+const langToggleInput = document.getElementById("langToggle");
+const langLabelEn = document.getElementById("langLabelEn");
+const langLabelKo = document.getElementById("langLabelKo");
+
+// labels
+const titleText = document.getElementById("titleText");
+const wordCountLabel = document.getElementById("wordCountLabel");
+const difficultyLabel = document.getElementById("difficultyLabel");
+const diffEasy = document.getElementById("diffEasy");
+const diffMedium = document.getElementById("diffMedium");
+const diffHard = document.getElementById("diffHard");
+const progressLabel = document.getElementById("progressLabel");
+const correctLabel = document.getElementById("correctLabel");
+const wrongLabel = document.getElementById("wrongLabel");
+const timeLabel = document.getElementById("timeLabel");
+const accuracyLabel = document.getElementById("accuracyLabel");
+const avgTimeLabel = document.getElementById("avgTimeLabel");
+
 // ----- State -----
 let wordList = [];
 let currentIndex = 0;
@@ -49,7 +84,6 @@ let timerIntervalId = null;
 // ----- Helpers -----
 
 function shuffle(array) {
-  // Fisher–Yates shuffle
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -57,22 +91,24 @@ function shuffle(array) {
 }
 
 function getWordsForDifficulty(difficulty, count) {
-  let base;
-  if (difficulty === "easy") base = easyWords;
-  else if (difficulty === "medium") base = mediumWords;
-  else base = hardWords;
+  const pool = getActiveWordPool();
+  let filtered;
 
-  const arr = [...base]; // copy
-  shuffle(arr);
-
-  const result = [];
-  while (result.length < count) {
-    for (let w of arr) {
-      result.push(w);
-      if (result.length === count) break;
-    }
+  if (difficulty === "easy") {
+    filtered = pool.filter(w => w.length <= 4);
+  } else if (difficulty === "medium") {
+    filtered = pool.filter(w => w.length >= 5 && w.length <= 7);
+  } else {
+    filtered = pool.filter(w => w.length >= 8);
   }
-  return result;
+
+  if (filtered.length < count) {
+    filtered = pool;
+  }
+
+  const arr = [...filtered];
+  shuffle(arr);
+  return arr.slice(0, count);
 }
 
 function updateStats() {
@@ -153,7 +189,11 @@ function resetState() {
   accuracySpan.textContent = "0";
   avgTimeSpan.textContent = "0.0";
 
-  currentWordSpan.textContent = 'Press "Start"';
+  if (currentLanguage === "en") {
+    currentWordSpan.textContent = 'Press "Start"';
+  } else {
+    currentWordSpan.textContent = "시작 버튼을 눌러 주세요";
+  }
   setCurrentWordHighlight(null);
   resultMessage.textContent = "";
 
@@ -162,6 +202,72 @@ function resetState() {
 
   startBtn.disabled = false;
   resetBtn.disabled = true;
+}
+
+// ----- Language UI text -----
+
+function applyLanguageTexts() {
+  if (currentLanguage === "en") {
+    document.documentElement.lang = "en";
+    titleText.textContent = "Typing Trainer";
+
+    wordCountLabel.textContent = "Number of words:";
+    difficultyLabel.textContent = "Difficulty:";
+    diffEasy.textContent = "Easy";
+    diffMedium.textContent = "Medium";
+    diffHard.textContent = "Hard";
+
+    progressLabel.textContent = "Words done:";
+    correctLabel.textContent = "Correct:";
+    wrongLabel.textContent = "Wrong:";
+    timeLabel.textContent = "Time:";
+    accuracyLabel.textContent = "Accuracy:";
+    avgTimeLabel.textContent = "Average time per word:";
+    userInput.placeholder = "Type the word here and press Enter";
+    startBtn.textContent = "Start";
+    resetBtn.textContent = "Reset";
+
+    if (!isRunning && currentIndex === 0) {
+      currentWordSpan.textContent = 'Press "Start"';
+    }
+
+    langLabelEn.classList.add("active");
+    langLabelKo.classList.remove("active");
+  } else {
+    document.documentElement.lang = "ko";
+    titleText.textContent = "타자 연습기";
+
+    wordCountLabel.textContent = "단어 개수:";
+    difficultyLabel.textContent = "난이도:";
+    diffEasy.textContent = "쉬움";
+    diffMedium.textContent = "보통";
+    diffHard.textContent = "어려움";
+
+    progressLabel.textContent = "진행:";
+    correctLabel.textContent = "정답 수:";
+    wrongLabel.textContent = "오답 수:";
+    timeLabel.textContent = "시간:";
+    accuracyLabel.textContent = "정확도:";
+    avgTimeLabel.textContent = "단어당 평균 시간:";
+    userInput.placeholder = "여기에 단어를 입력하고 Enter를 누르세요";
+    startBtn.textContent = "시작";
+    resetBtn.textContent = "리셋";
+
+    if (!isRunning && currentIndex === 0) {
+      currentWordSpan.textContent = "시작 버튼을 눌러 주세요";
+    }
+
+    langLabelEn.classList.remove("active");
+    langLabelKo.classList.add("active");
+  }
+}
+
+function getResultMessage(accuracy, correct, wrong) {
+  if (currentLanguage === "en") {
+    return `Done! Accuracy: ${accuracy.toFixed(0)}% (${correct} correct, ${wrong} wrong)`;
+  } else {
+    return `완료! 정확도: ${accuracy.toFixed(0)}% (${correct}개 정답, ${wrong}개 오답)`;
+  }
 }
 
 // ----- Game flow -----
@@ -198,9 +304,7 @@ function finishGame() {
 
   const attempts = correctCount + wrongCount;
   const accuracy = attempts > 0 ? (correctCount / attempts) * 100 : 0;
-  resultMessage.textContent = `Done! Accuracy: ${accuracy.toFixed(
-    0
-  )}% (${correctCount} correct, ${wrongCount} wrong)`;
+  resultMessage.textContent = getResultMessage(accuracy, correctCount, wrongCount);
 }
 
 // ----- Event listeners -----
@@ -213,6 +317,12 @@ startBtn.addEventListener("click", () => {
 
 resetBtn.addEventListener("click", () => {
   resetState();
+});
+
+langToggleInput.addEventListener("change", () => {
+  currentLanguage = langToggleInput.checked ? "ko" : "en";
+  resetState();
+  applyLanguageTexts();
 });
 
 userInput.addEventListener("keydown", (e) => {
@@ -241,3 +351,4 @@ userInput.addEventListener("keydown", (e) => {
 
 // Initial state
 resetState();
+applyLanguageTexts();
