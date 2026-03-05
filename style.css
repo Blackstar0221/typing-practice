@@ -23,13 +23,84 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
+/* top bar with title + language toggle */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 h1 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.6rem;
+  margin: 0;
+  font-size: 1.4rem;
   color: #fbbf24;
 }
+
+/* language toggle */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.lang-label {
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.lang-label.active {
+  opacity: 1;
+  color: #e5e7eb;
+}
+
+/* switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #4b5563;
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #22c55e;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+/* rest of UI */
 
 .settings {
   display: flex;
@@ -162,8 +233,8 @@ button:not(:disabled):active {
 @media (max-width: 480px) {
   .app {
     border-radius: 0;
-    max-width: 100%;
-    min-height: 100vh;
+  max-width: 100%;
+  min-height: 100vh;
   }
 
   h1 {
