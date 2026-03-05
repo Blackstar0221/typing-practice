@@ -8,11 +8,22 @@
 </head>
 <body>
   <div class="app">
-    <h1>Typing Trainer</h1>
+    <div class="top-bar">
+      <h1 id="titleText">Typing Trainer</h1>
+
+      <div class="lang-toggle">
+        <span id="langLabelEn" class="lang-label active">EN</span>
+        <label class="switch">
+          <input type="checkbox" id="langToggle">
+          <span class="slider"></span>
+        </label>
+        <span id="langLabelKo" class="lang-label">KR</span>
+      </div>
+    </div>
 
     <div class="settings">
       <label>
-        Number of words:
+        <span id="wordCountLabel">Number of words:</span>
         <select id="wordCountSelect">
           <option value="10">10</option>
           <option value="20">20</option>
@@ -21,11 +32,11 @@
       </label>
 
       <label>
-        Difficulty:
+        <span id="difficultyLabel">Difficulty:</span>
         <select id="difficultySelect">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
+          <option value="easy" id="diffEasy">Easy</option>
+          <option value="medium" id="diffMedium">Medium</option>
+          <option value="hard" id="diffHard">Hard</option>
         </select>
       </label>
     </div>
@@ -51,14 +62,14 @@
 
     <div class="stats">
       <div>
-        <strong>Words done:</strong>
+        <strong id="progressLabel">Words done:</strong>
         <span id="wordsDone">0</span>/<span id="wordsTotal">0</span>
       </div>
-      <div><strong>Correct:</strong> <span id="correctCount">0</span></div>
-      <div><strong>Wrong:</strong> <span id="wrongCount">0</span></div>
-      <div><strong>Time:</strong> <span id="timeElapsed">0.0</span> s</div>
-      <div><strong>Accuracy:</strong> <span id="accuracy">0</span>%</div>
-      <div><strong>Average time per word:</strong> <span id="avgTime">0.0</span> s</div>
+      <div><strong id="correctLabel">Correct:</strong> <span id="correctCount">0</span></div>
+      <div><strong id="wrongLabel">Wrong:</strong> <span id="wrongCount">0</span></div>
+      <div><strong id="timeLabel">Time:</strong> <span id="timeElapsed">0.0</span> s</div>
+      <div><strong id="accuracyLabel">Accuracy:</strong> <span id="accuracy">0</span>%</div>
+      <div><strong id="avgTimeLabel">Average time per word:</strong> <span id="avgTime">0.0</span> s</div>
     </div>
 
     <div class="result-message" id="resultMessage"></div>
