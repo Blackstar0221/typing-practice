@@ -12,7 +12,7 @@ const wordPoolEn = [
   "conscious", "misleading", "enigmatic", "forest", "rocket", "signal",
   "matrix", "neuron", "orbit", "shadow", "spiral", "binary", "circuit",
   "portal", "crystal", "thunder", "static", "quantum", "fusion",
-  "oboe", "galaxytaurus", "twinkle", "lego", "replit"
+  "oboe", "github", "lego", "vercel"
 ];
 
 // Korean word pool
@@ -20,13 +20,12 @@ const wordPoolKo = [
   "고양이", "강아지", "바다", "하늘", "학교",
   "컴퓨터", "프로그래밍", "자바스크립트", "키보드", "연습",
   "음악", "게임", "레고", "트윈클", "행성",
-  "나무", "별빛", "우주", "은하", "토러스",
-  "연필", "공책", "시계", "버스", "지하철",
+  "나무", "별빛", "우주", "은하","연필", "공책", "시계", "버스", "지하철",
   "초콜릿", "사과", "바나나", "딸기", "라면",
   "책상", "의자", "창문", "문", "복도",
   "연습장", "시험", "숙제", "공부", "집중",
-  "인터넷", "브라우저", "깃허브", "레플릿", "코딩",
-  "알고리즘", "함수", "변수", "객체", "배열"
+  "인터넷", "브라우저", "깃허브", "코딩",
+  "알고리즘", "함수", "변수", "오보에", "배열"
 ];
 
 function getActiveWordPool() {
